@@ -4,4 +4,5 @@ myenv/
 # Ignore cache
 __pycache__/
 
+# Ignore macOS system files
 .DS_Store
