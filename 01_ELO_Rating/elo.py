@@ -52,11 +52,11 @@ class ChessTournament:
 
     def simulate_match(self, player_one: Player, player_two: Player) -> Tuple[MatchResult, MatchResult]:
         expected_score_player_one = self.elo_system.expected_score(player_one.rating, player_two.rating)
+        expected_score_player_two = self.elo_system.expected_score(player_two.rating, player_one.rating)
         
-        # Determine result based on weighted probabilities
         result = random_choices(
             population=[MatchResult.WIN, MatchResult.DRAW, MatchResult.LOSS],
-            weights=[expected_score_player_one, 0.3, 1 - expected_score_player_one],
+            weights=[expected_score_player_one, 0.3, expected_score_player_two],
             k=1
         )[0]
         
@@ -91,10 +91,7 @@ if __name__ == "__main__":
     NUM_ROUNDS = 2
     NUM_GAMES = int(NUM_ROUNDS * NUM_PLAYERS * (NUM_PLAYERS + 1) / 2)
 
-    # Initialize players
     players = [Player(f"Player {i+1}") for i in range(NUM_PLAYERS)]
-
-    # Create and run the tournament
     tournament = ChessTournament(players=players, num_rounds=NUM_ROUNDS)
     tournament.play_tournament()
 
@@ -102,8 +99,7 @@ if __name__ == "__main__":
     mean = stats_mean(ratings)
     stdev = stats_stdev(ratings)
 
-    # Print final ratings
-    print(f"Final Rating after {NUM_GAMES} games:")
+    logger.debug(f"Final Rating after {NUM_GAMES} games:")
     for player in players:
         logger.debug(player)
     logger.info(f"Mean - {mean}; Standard Deviation - {stdev}")
