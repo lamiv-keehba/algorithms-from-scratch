@@ -1,1 +1,1 @@
-Testing is always fun for me :):)
+Testing is always fun for me!
